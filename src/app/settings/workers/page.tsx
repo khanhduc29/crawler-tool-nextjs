@@ -1,4 +1,6 @@
-"use client";
+﻿"use client";
+
+import { authFetch } from "@/utils/authFetch";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -53,7 +55,7 @@ export default function WorkersSettingsPage() {
     try {
       const params = new URLSearchParams();
       if (filter) params.set("tool", filter);
-      const res = await fetch(`${API}/workers/list?${params}`);
+      const res = await authFetch(`${API}/workers/list?${params}`);
       const json = await res.json();
       if (json.success) setWorkers(json.data || []);
     } catch { /* ignore */ }
@@ -71,7 +73,7 @@ export default function WorkersSettingsPage() {
     if (!formWorkerId.trim()) { flash("Worker ID là bắt buộc", "err"); return; }
     setRegistering(true);
     try {
-      const res = await fetch(`${API}/workers/register`, {
+      const res = await authFetch(`${API}/workers/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -96,7 +98,7 @@ export default function WorkersSettingsPage() {
   const handleDelete = async (workerId: string) => {
     if (!confirm(`Xóa worker "${workerId}"?`)) return;
     try {
-      const res = await fetch(`${API}/workers/${workerId}`, { method: "DELETE" });
+      const res = await authFetch(`${API}/workers/${workerId}`, { method: "DELETE" });
       const json = await res.json();
       if (json.success) { flash("🗑 Đã xóa worker!"); fetchWorkers(); }
       else flash(`❌ ${json.message}`, "err");
