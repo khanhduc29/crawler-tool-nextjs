@@ -4,6 +4,7 @@ import { authFetch } from "@/utils/authFetch";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 const API = "/api/proxy";
 
@@ -48,6 +49,7 @@ const emptyForm = {
 };
 
 export default function ProxySettingsPage() {
+  const { user } = useAuth();
   const [proxies, setProxies] = useState<Proxy[]>([]);
   const [form, setForm] = useState({ ...emptyForm });
   const [editId, setEditId] = useState<string | null>(null);
@@ -326,7 +328,7 @@ export default function ProxySettingsPage() {
           { href: "/settings/accounts", label: "🔐 Tài khoản" },
           { href: "/settings/proxies", label: "🌐 Proxy", active: true },
           { href: "/settings/workers", label: "🤖 Workers" },
-          { href: "/settings/users", label: "👥 Users" },
+          ...(user?.role === "admin" ? [{ href: "/settings/users", label: "👥 Users" }] : []),
         ].map((tab) => (
           <Link
             key={tab.href}

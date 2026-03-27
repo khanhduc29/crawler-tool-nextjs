@@ -4,6 +4,7 @@ import { authFetch } from "@/utils/authFetch";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 const API = "/api/proxy";
 
@@ -50,6 +51,7 @@ const emptyForm = {
 };
 
 export default function AccountSettingsPage() {
+  const { user } = useAuth();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [form, setForm] = useState({ ...emptyForm });
   const [editId, setEditId] = useState<string | null>(null);
@@ -145,7 +147,7 @@ export default function AccountSettingsPage() {
           { href: "/settings/accounts", label: "🔐 Tài khoản", active: true },
           { href: "/settings/proxies", label: "🌐 Proxy" },
           { href: "/settings/workers", label: "🤖 Workers" },
-          { href: "/settings/users", label: "👥 Users" },
+          ...(user?.role === "admin" ? [{ href: "/settings/users", label: "👥 Users" }] : []),
         ].map((tab) => (
           <Link key={tab.href} href={tab.href} style={{
             padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 600, textDecoration: "none",
