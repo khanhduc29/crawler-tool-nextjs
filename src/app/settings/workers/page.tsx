@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { authFetch } from "@/utils/authFetch";
 
@@ -139,6 +139,7 @@ export default function WorkersSettingsPage() {
           { href: "/settings/accounts", label: "🔐 Tài khoản" },
           { href: "/settings/proxies", label: "🌐 Proxy" },
           { href: "/settings/workers", label: "🤖 Workers", active: true },
+          { href: "/settings/users", label: "👥 Users" },
         ].map((tab) => (
           <Link key={tab.href} href={tab.href} style={{
             padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 600, textDecoration: "none",

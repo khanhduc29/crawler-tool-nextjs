@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { authFetch } from "@/utils/authFetch";
 
@@ -326,6 +326,7 @@ export default function ProxySettingsPage() {
           { href: "/settings/accounts", label: "🔐 Tài khoản" },
           { href: "/settings/proxies", label: "🌐 Proxy", active: true },
           { href: "/settings/workers", label: "🤖 Workers" },
+          { href: "/settings/users", label: "👥 Users" },
         ].map((tab) => (
           <Link
             key={tab.href}
