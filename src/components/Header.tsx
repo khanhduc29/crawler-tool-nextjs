@@ -45,6 +45,7 @@ export default function Header() {
                 </button>
                 <Link href="/">Trang chủ</Link>
                 <Link href="/dashboard">📊 Dashboard</Link>
+                <Link href="/activity">📋 Lịch sử</Link>
                 <Link href="/settings/accounts">Cài đặt</Link>
 
                 {/* Profile avatar button */}
