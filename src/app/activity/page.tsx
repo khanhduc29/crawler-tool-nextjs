@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { authFetch } from "@/utils/authFetch";
 import { useRouter } from "next/navigation";
@@ -114,6 +114,7 @@ export default function ActivityPage() {
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
 
@@ -168,9 +169,14 @@ export default function ActivityPage() {
     fetchData();
   }, [user, fetchData, router]);
 
-  const handleSearch = () => {
-    setSearch(searchInput);
-    setPage(1);
+  // Debounce search
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setSearch(value);
+      setPage(1);
+    }, 500);
   };
 
   const openDetail = async (item: ActivityItem) => {
@@ -325,20 +331,14 @@ export default function ActivityPage() {
           placeholder="Đến ngày"
         />
 
-        {/* Search */}
-        <div style={{ display: "flex", gap: 6, flex: 1, minWidth: 200 }}>
-          <input
-            type="text"
-            placeholder="🔍 Tìm kiếm keyword..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            style={{ ...inputStyle, flex: 1 }}
-          />
-          <button onClick={handleSearch} style={searchBtnStyle}>
-            Tìm
-          </button>
-        </div>
+        {/* Search (debounce) */}
+        <input
+          type="text"
+          placeholder="🔍 Tìm kiếm keyword..."
+          value={searchInput}
+          onChange={(e) => handleSearchChange(e.target.value)}
+          style={{ ...inputStyle, flex: 1, minWidth: 200 }}
+        />
       </div>
 
       {/* Summary bar */}
